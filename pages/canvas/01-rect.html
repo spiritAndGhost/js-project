@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="tutorial" width="300" height="300"></canvas>
+</body>
+<script type="text/javascript">
+    function draw(){
+        var canvas = document.getElementById('tutorial');
+        if(!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        // 填充色
+        ctx.fillStyle = "rgb(200,0,0)";
+        // 线条颜色
+        ctx.strokeStyle = "#00c1de";
+        //绘制矩形 默认为黑色
+        ctx.fillRect (10, 10, 100, 50); 
+        //绘制矩形边框
+        ctx.strokeRect(10, 70, 100, 50);
+        //清除指定的矩形区域，然后这块区域会变的完全透明。
+        ctx.clearRect(15, 15, 50, 25);  
+    }
+    draw();
+</script>
+</html>

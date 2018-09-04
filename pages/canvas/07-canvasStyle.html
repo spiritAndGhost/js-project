@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas width="300" height="160" id="canvasStyle"></canvas>
+</body>
+<script>
+    /*
+    一, lineWidth = value
+    二, lineCap = type
+        共有3个值：
+        butt：线段末端以方形结束
+        round：线段末端以圆形结束
+        square：线段末端以方形结束，但是增加了一个宽度和线段相同，高度是线段厚度一半的矩形区域。
+    三, lineJoin = type
+        同一个path内，设定线条与线条间接合处的样式。
+        共有3个值round, bevel 和 miter：
+        round
+        通过填充一个额外的，圆心在相连部分末端的扇形，绘制拐角的形状。 圆角的半径是线段的宽度。
+        bevel
+        在相连部分的末端填充一个额外的以三角形为底的区域， 每个部分都有各自独立的矩形拐角。
+        miter(默认)
+        通过延伸相连部分的外边缘，使其相交于一点，形成一个额外的菱形区域。
+    四, 4. 虚线
+        用 setLineDash 方法和 lineDashOffset 属性来制定虚线样式. 
+        setLineDash 方法接受一个数组，来指定线段与间隙的交替；
+        lineDashOffset属性设置起始偏移量.
+    */
+    function draw() {
+        var vas = document.getElementById("canvasStyle");
+        if(!vas.getContext) return;
+        var ctx = vas.getContext("2d");
+        var lineArr = [60, 50, 70, 60, 90, 120, 30, 70, 100];
+        var padding = 10;
+        var wth = vas.width;
+        var hgh = vas.height;
+        var xLength = wth-padding*2;
+        var yLength = hgh-padding*2;
+        var x = xLength/(lineArr.length-1);
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        for(var i=0; i<lineArr.length; i++) {
+            ctx.lineTo(padding+x*i,yLength-lineArr[i]);
+        }
+        ctx.stroke();
+
+        ctx.setLineDash([20, 5]); // [实际长度，间隙长度]
+        ctx.lineDashOffset = -0;
+        ctx.strokeRect(0, 0, 300, 160);
+        
+    }
+    draw();
+</script>
+</html>

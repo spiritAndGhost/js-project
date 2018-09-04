@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="tutorial" width="300" height="200"></canvas>
+    <script>
+        /*
+            裁剪路径
+            clip()
+            ​把已经创建的路径转换成裁剪路径。
+            ​裁剪路径的作用是遮罩。只显示裁剪路径内的区域，裁剪路径外的区域会被隐藏。
+            ​注意：clip()只能遮罩在这个方法调用之后绘制的图像，如果是clip()方法调用之前绘制的图像，则无法实现遮罩。
+        */
+        function draw(){
+            var canvas = document.getElementById('tutorial');
+            if (!canvas.getContext) return;
+            var ctx = canvas.getContext("2d");
+            ctx.strokeRect(0, 0, 300, 200);
+            ctx.beginPath();
+            ctx.arc(20,20, 100, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.clip();
+
+            ctx.fillStyle = "pink";
+            ctx.fillRect(20, 20, 100,100);
+        }
+        draw();
+    </script>
+</body>
+</html>

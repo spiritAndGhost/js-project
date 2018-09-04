@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        document.body.innerHTML = '<canvas></canvas>'
+        var cvs = document.querySelector("canvas")
+        cvs.style.border = "1px solid red"
+        var ctx = cvs.getContext("2d");
+
+
+        var x0,y0;
+        for(var i=0;i<150;i++){
+        var x = i,y=Math.sin(x/10)*10+50;
+        ctx.strokeStyle="rgba(0,255,0,1)";
+        ctx.beginPath();
+        ctx.moveTo(x0||x,y0||y);
+        ctx.lineTo(x,y);
+        //ctx.stroke();
+
+        x0 = x,y0=y;
+
+        var linear = ctx.createLinearGradient(x,y,x,y+100);
+        linear.addColorStop(0,"rgba(0,255,0,0.6)");
+        linear.addColorStop(1,"rgba(255,255,255,0)");
+        ctx.strokeStyle= linear; 
+
+        ctx.beginPath();
+        ctx.moveTo(x,y);
+        ctx.lineTo(x,y+100);
+        ctx.stroke();
+
+
+        // var linear = ctx.createLinearGradient(x,y+50,x,y+120);
+        // linear.addColorStop(0,"rgba(255,0,0,0.6)");
+        // linear.addColorStop(1,"rgba(255,255,255,0)");
+        // ctx.strokeStyle= linear; 
+
+        // ctx.beginPath();
+        // ctx.moveTo(x,y+50);
+        // ctx.lineTo(x,y+120);
+        // ctx.stroke();
+        }
+    </script>
+</body>
+</html>

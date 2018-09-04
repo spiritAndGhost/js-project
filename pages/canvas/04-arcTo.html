@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <canvas id="tutorial">
+            你的浏览器不支持canvas,请升级你的浏览器
+        </canvas>
+    </div>
+    <script>
+        /*
+            arcTo(x1, y1, x2, y2, radius):
+            根据给定的控制点和半径画一段圆弧，最后再以直线连接两个控制点。
+        */
+        function draw(){
+            var canvas = document.getElementById('tutorial');
+            // 设置绘图面积
+            canvas.width = "500";
+            canvas.height = "500";
+            canvas.style.border = "1px solid #000000";
+            if (!canvas.getContext) return;
+            var ctx = canvas.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            //参数1、2：控制点1坐标   参数3、4：控制点2坐标  参数4：圆弧半径
+            ctx.arcTo(200, 50, 200, 200, 100);
+            ctx.lineTo(200, 200)
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.rect(50, 50, 10, 10);
+            ctx.rect(200, 50, 10, 10)
+            ctx.rect(200, 200, 10, 10)
+            ctx.fill()
+        }
+        draw();
+    </script>
+</body>
+</html>

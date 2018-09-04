@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="tutorial"></canvas>
+</body>
+<script>
+    /**
+        arc(x, y, r, startAngle, endAngle, anticlockwise):
+        以(x, y)为圆心，以r为半径，从 startAngle弧度开始到endAngle弧度结束。
+        anticlosewise是布尔值，true表示逆时针，false表示顺时针。(默认是顺时针)
+
+        注意：
+        这里的度数都是弧度。
+        0弧度是指的x轴正方形
+        radians=(Math.PI/180)*degrees   //角度转换成弧度
+    */
+    function draw() {
+        var canvas = document.getElementById('tutorial');
+        if (!canvas.getContext) return;
+        canvas.width = "300";
+        canvas.height = "300";
+        canvas.style.border = "1px solid #000000";
+        var ctx = canvas.getContext("2d");
+
+        ctx.beginPath();
+        ctx.arc(50, 50, 50, 0, Math.PI/2, false);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(110, 50, 50, 0, Math.PI/2, false);
+        ctx.fill();
+    }
+    draw();
+</script>
+</html>

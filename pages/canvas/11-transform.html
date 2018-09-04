@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="tutorial1" width="300" height="300"></canvas>
+    <canvas id="tutorial2" width="300" height="300"></canvas>
+    <canvas id="tutorial3" width="300" height="300"></canvas>
+</body>
+<script>
+    /**
+        变形
+        一, translate
+            translate(x, y)
+            ​用来移动 canvas 的原点到指定的位置
+            ​translate方法接受两个参数。x 是左右偏移量，y 是上下偏移量，如右图所示。
+            在做变形之前先保存状态是一个良好的习惯。大多数情况下，调用 restore 方法比手动恢复原先的状态要简单得多。又如果你是在一个循环中做位移
+            但没有保存和恢复canvas 的状态，很可能到最后会发现怎么有些东西不见了，那是因为它很可能已经超出 canvas 范围以外了。
+            ​注意：translate移动的是canvas的坐标原点。(坐标变换)
+        二, rotate
+            rotate(angle)
+            ​旋转坐标轴。
+            ​这个方法只接受一个参数：旋转的角度(angle)，它是顺时针方向的，以弧度为单位的值。
+            ​旋转的中心是坐标原点。
+        三, 9.3 scale
+            scale(x, y)
+​            我们用它来增减图形在 canvas 中的像素数目，对形状，位图进行缩小或者放大。
+​            scale方法接受两个参数。x,y分别是横轴和纵轴的缩放因子，它们都必须是正值。
+            值比 1.0 小表示缩 小，比 1.0 大则表示放大，值为 1.0 时什么效果都没有。
+​            默认情况下，canvas 的 1 单位就是 1 个像素。举例说，如果我们设置缩放因子是 0.5，1 个单位就变成对应 0.5 个像素，
+            这样绘制出来的形状就会是原先的一半。同理，设置为 2.0 时，1 个单位就对应变成了 2 像素，绘制的结果就是图形放大了 2 倍。
+        四, transform(变形矩阵)
+            transform(a, b, c, d, e, f)
+    **/
+    function draw(){
+        var canvas = document.getElementById('tutorial1');
+        if (!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        ctx.strokeRect(0, 0, 300, 300);
+        ctx.save(); //保存坐原点平移之前的状态
+        ctx.translate(100, 100);
+        ctx.strokeRect(0, 0, 100, 100)
+        ctx.restore(); //恢复到最初状态
+        ctx.translate(210, 210);
+        ctx.fillRect(0, 0, 80, 80)
+    }
+    function draw2(){
+        var canvas = document.getElementById('tutorial2');
+        if (!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        ctx.strokeRect(0, 0, 300, 300);
+        ctx.fillStyle = "red";
+        ctx.save();
+
+        ctx.translate(100, 100);
+        ctx.rotate(Math.PI / 180 * 45);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(0, 0, 100, 100);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(0, 0);
+        ctx.fillRect(0, 0, 50, 50)
+        ctx.restore();
+    }
+    function draw3(){
+        var canvas = document.getElementById('tutorial3');
+        if (!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        ctx.strokeRect(0, 0, 300, 300);
+        ctx.transform(1, 1, 0, 1, 0, 0);
+        ctx.fillRect(0, 0, 100, 100);
+    }
+    draw();
+    draw2();
+    draw3();
+</script>
+</html>
