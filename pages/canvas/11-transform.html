@@ -35,6 +35,23 @@
             这样绘制出来的形状就会是原先的一半。同理，设置为 2.0 时，1 个单位就对应变成了 2 像素，绘制的结果就是图形放大了 2 倍。
         四, transform(变形矩阵)
             transform(a, b, c, d, e, f)
+            a (m11)
+            ​ 水平放大
+            b (m12)
+            ​ 水平扭曲
+            c (m21)
+            ​ 垂直扭曲
+            d (m22)
+            ​ 垂直方大
+            e (dx)
+            水平移动
+            f (dy)
+            垂直移动
+
+            ​ Vertical moving.
+            使用context.transform (1,0,0,1,dx,dy)代替context.translate(dx,dy)
+            使用context.transform(sx,0,0,sy,0,0)代替context.scale(sx, sy)
+            使用context.transform(0,b,c,0,0,0)来实现倾斜效果(最实用)。
     **/
     function draw(){
         var canvas = document.getElementById('tutorial1');
@@ -72,7 +89,7 @@
         if (!canvas.getContext) return;
         var ctx = canvas.getContext("2d");
         ctx.strokeRect(0, 0, 300, 300);
-        ctx.transform(1, 1, 0, 1, 0, 0);
+        ctx.transform(1, 1, 0.1, 1, 0, 0);
         ctx.fillRect(0, 0, 100, 100);
     }
     draw();
