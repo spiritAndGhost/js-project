@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        #canvas {
+            border: 1px solid darkorange;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="600" height="300"></canvas>
+<script type="text/javascript">
+    window.addEventListener('load', loadCanvas);
+    function loadCanvas(){
+        var canvas = document.getElementById('canvas');
+        if(!canvas.getContext){
+            return;
+        }
+        var context = canvas.getContext('2d');
+        //添加鼠标移动事件
+        canvas.addEventListener('mousemove', MouseMove);
+
+        function MouseMove(e){
+            var location = windowToCanvas2(canvas, e.clientX, e.clientY);
+            drawLines(location.x, location.y);
+        }
+
+        //绘制辅助线
+        function drawLines(x, y){
+            context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+            context.beginPath();
+            context.moveTo(x, 0);
+            context.lineTo(x, context.canvas.height);
+            context.stroke();
+            context.beginPath();
+            context.moveTo(0, y);
+            context.lineTo(context.canvas.width, y);
+            context.stroke();
+            context.font = '20pt Arial';
+            context.fillStyle = 'green';
+            var text = '(' + parseInt(x)+','+parseInt(y) + ')';
+            context.fillText(text, 20, 50);
+        }
+    }
+
+    //坐标转换
+    function windowToCanvas(canvas, x,  y){
+        var canvasBox = canvas.getBoundingClientRect(); //获取canvas元素的边界框
+        return {
+            x: (x - canvasBox.left)*(canvas.width/canvasBox.width), //对canvas元素大小与绘图表面大小不一致时进行缩放
+            y: (y - canvasBox.top)*(canvas.height/canvasBox.height)
+        }
+    }
+　　//方法2
+    function windowToCanvas2(canvas, x, y){
+        return {
+            x: x + document.body.scrollLeft - document.body.clientLeft - canvas.offsetLeft,
+            y: y + document.body.scrollTop - document.body.clientTop - canvas.offsetTop
+        }
+    }
+</script>
+</body>
+</html>

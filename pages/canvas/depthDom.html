@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas width="1108" height="434" id="canvas"></canvas>
+    </div>
+</body>
+<script>
+    var buyArr = [
+        {price: 7316.4, amount: 2.7972, ladderAmount: 26.6252},
+        {price: 7312.4, amount: 2.2792, ladderAmount: 28.9044},
+        {price: 7307.9, amount: 1.6058, ladderAmount: 30.5102},
+        {price: 7303.9, amount: 1.813, ladderAmount: 32.3232},
+        {price: 7200.5, amount: 2.02, ladderAmount: 34.3432},
+        {price: 7028.33, amount: 0.2, ladderAmount: 34.5432},
+        {price: 6685.31, amount: 3.1578, ladderAmount: 34.701},
+        {price: 5810, amount: 0.0246, ladderAmount: 34.7256},
+        {price: 5700, amount: 0.05, ladderAmount: 34.7756},
+        {price: 4000, amount: 0.0457, ladderAmount: 34.8213},
+    ];
+    var sellArr = [
+        {price: 7366.01, amount: 1.1914, ladderAmount: 1.1914},
+        {price: 7366.01, amount: 1.1914, ladderAmount: 1.1914},
+        {price: 7363.16, amount: 0.4662, ladderAmount: 1.6576},
+        {price: 7360.36, amount: 1.6058, ladderAmount: 3.2634},
+        {price: 7358.12, amount: 1.7612, ladderAmount: 5.0246},
+        {price: 7354.12, amount: 1.7094, ladderAmount: 6.734},
+        {price: 7352.39, amount: 1.3468, ladderAmount: 8.0808},
+        {price: 7348.39, amount: 0.8806, ladderAmount: 8.9614},
+        {price: 7345.98, amount: 1.3468, ladderAmount: 10.3082},
+        {price: 7343.84, amount: 1.5022, ladderAmount: 11.8104},
+    ];
+    // 绘制坐标系
+    function draw(){
+        var canvas = document.getElementById("canvas");
+        if(!canvas.getContext) return;
+        var ctx = canvas.getContext("2d");
+        
+        sellArr.reverse();
+        //刻度点的个数
+        // 买入深度和卖出深度的刻度相同，都是xDepthScale个
+        var xDepthScale = 4;
+        var yDepthScale = 10;
+        // 一条数据x轴占据的宽度
+        var rectWidth = 50;
+        // y轴可绘高度
+        var yHeight = 400-50;
+        var xBuyMax = Math.max.apply(Math, buyArr.map(function(o) {return o.price}));
+        var xBuyMin = Math.min.apply(Math, buyArr.map(function(o) {return o.price}));
+        var xSellMax = Math.max.apply(Math, sellArr.map(function(o) {return o.price}));
+        var xSellMin = Math.min.apply(Math, sellArr.map(function(o) {return o.price}));
+        var yBuyMax = Math.max.apply(Math, buyArr.map(function(o) {return o.amount}));
+        var ySellMax = Math.max.apply(Math, sellArr.map(function(o) {return o.amount}));
+        var amountMax = Math.max(yBuyMax, ySellMax);
+        // console.log("xBuyMax="+xBuyMax+";"+"xBuyMin="+xBuyMin+";"+"xSellMax="+xSellMax+";"+"xSellMin="+xSellMin+";");
+
+        // 深度图背景
+        ctx.fillStyle = "#1E212B";
+        ctx.fillRect(0, 0, 1108, 434);
+
+        // 绘制x y轴
+        ctx.beginPath();
+        // x轴最左端
+        ctx.moveTo(32, 50);
+        ctx.lineTo(32, 400);
+        // 原点
+        ctx.lineTo(1032, 400);
+        // y轴最大点
+        ctx.lineTo(1032, 50);
+        ctx.strokeStyle = "#32343E";
+        ctx.lineWidth = 1; 
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.stroke();
+
+        // y轴深度刻度
+        for(let i=0; i< yDepthScale; i++) {
+            ctx.beginPath();
+            ctx.moveTo(1032+1, 400-23-75*i);
+            ctx.lineTo(1032+1+6, 400-23-75*i);
+            ctx.stroke();
+            ctx.font = "";
+            // ctx.fillText(amountMax/yDepthScale*(350-23),1032+1+6+20, 400-23-75*i)
+        }
+
+        // 绘制买入深度图
+        // 保存原点坐标
+        ctx.save();
+        // 新的原点坐标
+        ctx.translate(532, 400);
+        // 买入深度图
+        for(let i=0; i< buyArr.length; i++) {
+            // 条状图
+            ctx.fillStyle = "#2C252D";
+            yL = yHeight*(buyArr[i].amount/amountMax);
+            ctx.fillRect(-rectWidth*i, 0, -rectWidth, -yL);
+            // 刻度线
+            ctx.beginPath();
+            ctx.moveTo(-rectWidth*i-rectWidth/2, 1);
+            ctx.lineTo(-rectWidth*i-rectWidth/2, 1+6);
+            ctx.stroke();
+            // 文字
+            ctx.font = "12px ArialMT"
+            ctx.fillStyle = "#666870";
+            ctx.textAlign = "center";
+            ctx.fillText(buyArr[i].price, -rectWidth*i-rectWidth/2, 20);
+        }
+        // 卖出深度图
+        for(let i=0; i< sellArr.length; i++) {
+            ctx.fillStyle = "#1C2A2E";
+            yL = yHeight*(sellArr[i].amount/amountMax);
+            ctx.fillRect(rectWidth*i, 0, rectWidth, -yL);
+            // 刻度线
+            ctx.beginPath();
+            ctx.moveTo(rectWidth*i+rectWidth/2, 1);
+            ctx.lineTo(rectWidth*i+rectWidth/2, 1+6);
+            ctx.stroke(); 
+            // 文字
+            ctx.font = "12px ArialMT"
+            ctx.fillStyle = "#666870";
+            ctx.textAlign = "center";
+            ctx.fillText(sellArr[i].price, rectWidth*i+rectWidth/2, 20);
+        }
+        // 恢复原点坐标
+        ctx.restore();
+
+
+    }
+    draw();
+</script>
+</html>

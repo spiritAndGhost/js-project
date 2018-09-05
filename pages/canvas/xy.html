@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>坐标轴</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            margin: 100px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script type="text/javascript">
+    window.onload = function(){
+        var canvas = document.getElementById('canvas');
+        canvas.width = '400';
+        canvas.height = '300';
+        if(!canvas.getContext){
+            alert('当前浏览器不支持canvas');
+            return;
+        }
+        var context = canvas.getContext('2d');
+        context.translate(50,20);
+        //绘制坐标轴的方法
+        function drawAxis(cxt){
+            var dx = 0,
+                dy = 0,
+                x = 0,
+                y = 0,
+                w = canvas.width,
+                h = canvas.height;
+            cxt.lineWidth = 2;
+            cxt.strokeStyle = "green";
+
+            var textX = 0;
+            var textY = 0;
+            //绘制x轴
+            cxt.moveTo(x, y);
+            cxt.lineTo(w, y);
+            cxt.stroke();
+            //绘制数字
+            while (dx < w) {
+                cxt.font = '12pt Arial';
+                cxt.fillStyle = 'red';
+                cxt.fillText(textY, dx, 0);
+                textY+= 50;
+                dx+=50;
+            }
+
+            //绘制y轴
+            cxt.moveTo(x, y);
+            cxt.lineTo(x, h);
+            cxt.stroke();
+
+            //绘制数字
+            while (dy < h) {
+                cxt.font = '12pt Arial';
+                cxt.fillStyle = 'red';
+                cxt.fillText(textX, -30, dy);
+                textX+= 50;
+                dy+=50;
+            }
+
+        }
+        drawAxis(context);
+    };
+</script>
+</body>
+</html>
