@@ -49,14 +49,38 @@
         var ctx = canvas.getContext("2d");
         
         sellArr.reverse();
+        
+        // canvas 绘图面积
+        var horizontalLine = canvas.width;
+        var verticalLine = canvas.height;
+
+        // 线宽
+        var lineWidth = 1;
+        // 刻度线长度
+        var scaleLineLength = 6;
         //刻度点的个数
-        // 买入深度和卖出深度的刻度相同，都是xDepthScale个
-        var xDepthScale = 4;
-        var yDepthScale = 10;
-        // 一条数据x轴占据的宽度
-        var rectWidth = 50;
-        // y轴可绘高度
-        var yHeight = 400-50;
+        var yDepthScale = 11;
+        // x轴刻度开始的点;
+        var xScaleStart = 23;
+        // 顶部边距
+        yTop = 50;
+        // 底部边距
+        yBottom = 34;
+        // 左边距
+        xLeft = 32;
+        // 右边距
+        xRight = 88;
+        // y轴可绘长度
+        var yLength = verticalLine - yTop - yBottom;
+        // x轴可绘长度
+        var xLength = horizontalLine - xLeft - xRight;
+        // x轴柱状图
+        var xAmount = buyArr.length + sellArr.length;
+        // 一条柱状图占据的宽度
+        var rectWidth = (xLength-2*lineWidth)/xAmount;
+        // 相邻刻度间间距
+        var yInterval = (yLength - xScaleStart)/yDepthScale;
+
         var xBuyMax = Math.max.apply(Math, buyArr.map(function(o) {return o.price}));
         var xBuyMin = Math.min.apply(Math, buyArr.map(function(o) {return o.price}));
         var xSellMax = Math.max.apply(Math, sellArr.map(function(o) {return o.price}));
@@ -64,21 +88,23 @@
         var yBuyMax = Math.max.apply(Math, buyArr.map(function(o) {return o.amount}));
         var ySellMax = Math.max.apply(Math, sellArr.map(function(o) {return o.amount}));
         var amountMax = Math.max(yBuyMax, ySellMax);
+        amountMax = amountMax.toFixed(4);
         // console.log("xBuyMax="+xBuyMax+";"+"xBuyMin="+xBuyMin+";"+"xSellMax="+xSellMax+";"+"xSellMin="+xSellMin+";");
 
         // 深度图背景
         ctx.fillStyle = "#1E212B";
-        ctx.fillRect(0, 0, 1108, 434);
+        ctx.fillRect(0, 0, horizontalLine, verticalLine);
+
 
         // 绘制x y轴
         ctx.beginPath();
         // x轴最左端
-        ctx.moveTo(32, 50);
-        ctx.lineTo(32, 400);
+        ctx.moveTo(xLeft, yTop);
+        ctx.lineTo(xLeft, yLength+yTop);
         // 原点
-        ctx.lineTo(1032, 400);
+        ctx.lineTo(xLeft+xLength, yLength+yTop);
         // y轴最大点
-        ctx.lineTo(1032, 50);
+        ctx.lineTo(xLeft+xLength, yTop);
         ctx.strokeStyle = "#32343E";
         ctx.lineWidth = 1; 
         ctx.lineCap = "round";
@@ -87,29 +113,37 @@
 
         // y轴深度刻度
         for(let i=0; i< yDepthScale; i++) {
+            // 刻度线
             ctx.beginPath();
-            ctx.moveTo(1032+1, 400-23-75*i);
-            ctx.lineTo(1032+1+6, 400-23-75*i);
+            ctx.moveTo(xLeft+xLength+lineWidth, yLength+yTop-xScaleStart-yInterval*i);
+            ctx.lineTo(xLeft+xLength+scaleLineLength, yLength+yTop-xScaleStart-yInterval*i);
             ctx.stroke();
-            ctx.font = "";
-            // ctx.fillText(amountMax/yDepthScale*(350-23),1032+1+6+20, 400-23-75*i)
+            // 文字
+            ctx.font = "12px ArialMT"
+            ctx.fillStyle = "#666870";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            let content = amountMax*(i/)
+            ctx.fillText((amountMax*i).toFixed(4),xLength+xLeft+scaleLineLength+6, yLength+yTop-xScaleStart-yInterval*i)
+            
+            
         }
 
         // 绘制买入深度图
         // 保存原点坐标
         ctx.save();
         // 新的原点坐标
-        ctx.translate(532, 400);
+        ctx.translate(xLeft+xLength/2, yLength+yTop);
         // 买入深度图
         for(let i=0; i< buyArr.length; i++) {
             // 条状图
             ctx.fillStyle = "#2C252D";
-            yL = yHeight*(buyArr[i].amount/amountMax);
+            yL = yLength*(buyArr[i].amount/amountMax);
             ctx.fillRect(-rectWidth*i, 0, -rectWidth, -yL);
             // 刻度线
             ctx.beginPath();
-            ctx.moveTo(-rectWidth*i-rectWidth/2, 1);
-            ctx.lineTo(-rectWidth*i-rectWidth/2, 1+6);
+            ctx.moveTo(-rectWidth*i-rectWidth/2, lineWidth);
+            ctx.lineTo(-rectWidth*i-rectWidth/2, scaleLineLength);
             ctx.stroke();
             // 文字
             ctx.font = "12px ArialMT"
@@ -120,7 +154,7 @@
         // 卖出深度图
         for(let i=0; i< sellArr.length; i++) {
             ctx.fillStyle = "#1C2A2E";
-            yL = yHeight*(sellArr[i].amount/amountMax);
+            yL = yLength*(sellArr[i].amount/amountMax);
             ctx.fillRect(rectWidth*i, 0, rectWidth, -yL);
             // 刻度线
             ctx.beginPath();
